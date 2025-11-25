@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
+import KnowledgeBase from '@/components/KnowledgeBase';
 
 const Index = () => {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Привет! Я помогу создать твой сайт. Опиши, что тебе нужно.' }
   ]);
   const [input, setInput] = useState('');
+  const [activeTab, setActiveTab] = useState('chat');
 
   const examplePrompts = [
     'Создай лендинг для IT-компании',
@@ -76,9 +79,30 @@ const Index = () => {
               </span>
             </div>
             <nav className="flex items-center gap-6">
-              <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <button
+                onClick={() => setActiveTab('chat')}
+                className={`text-sm transition-colors ${
+                  activeTab === 'chat' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Чат
+              </button>
+              <button
+                onClick={() => setActiveTab('knowledge')}
+                className={`text-sm transition-colors ${
+                  activeTab === 'knowledge' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                База знаний
+              </button>
+              <button
+                onClick={() => setActiveTab('features')}
+                className={`text-sm transition-colors ${
+                  activeTab === 'features' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
                 Возможности
-              </a>
+              </button>
               <Button variant="outline" size="sm">
                 <Icon name="Github" size={16} className="mr-2" />
                 GitHub
@@ -87,27 +111,30 @@ const Index = () => {
           </div>
         </header>
 
-        <section className="container mx-auto px-4 py-20 md:py-32">
+        <section className="container mx-auto px-4 py-12 md:py-20">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border mb-6">
-                <div className="w-2 h-2 rounded-full bg-primary animate-glow" />
-                <span className="text-sm text-muted-foreground">Создавай сайты через диалог с ИИ</span>
+            {activeTab === 'chat' && (
+              <div className="text-center mb-16 animate-fade-in">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border mb-6">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-glow" />
+                  <span className="text-sm text-muted-foreground">Создавай сайты через диалог с ИИ</span>
+                </div>
+                <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                  Твой сайт готов
+                  <br />
+                  <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                    за 5 минут
+                  </span>
+                </h1>
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
+                  Просто опиши, что нужно — и получи готовый сайт на современном стеке. 
+                  Без программирования, быстрее конструкторов в 30 раз.
+                </p>
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                Твой сайт готов
-                <br />
-                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                  за 5 минут
-                </span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
-                Просто опиши, что нужно — и получи готовый сайт на современном стеке. 
-                Без программирования, быстрее конструкторов в 30 раз.
-              </p>
-            </div>
+            )}
 
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {activeTab === 'chat' && (
+              <div className="grid md:grid-cols-2 gap-8 mb-16">
               <Card className="p-6 bg-card/50 backdrop-blur border-border/50 animate-slide-up">
                 <div className="flex items-center gap-2 mb-4">
                   <Icon name="MessageSquare" size={20} className="text-primary" />
@@ -162,37 +189,46 @@ const Index = () => {
                 ))}
               </div>
             </div>
+            )}
+
+            {activeTab === 'knowledge' && (
+              <div className="animate-fade-in">
+                <KnowledgeBase />
+              </div>
+            )}
+
+            {activeTab === 'features' && (
+              <div className="animate-fade-in">
+                <div className="text-center mb-16">
+                  <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                    Возможности платформы
+                  </h2>
+                  <p className="text-xl text-muted-foreground">
+                    Всё необходимое для создания современных веб-приложений
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {features.map((feature, idx) => (
+                    <Card
+                      key={idx}
+                      className="p-6 bg-card/30 backdrop-blur border-border/50 hover:border-primary/50 transition-all hover:scale-105 group"
+                      style={{ animationDelay: `${idx * 100}ms` }}
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 group-hover:from-primary/30 group-hover:to-secondary/30 transition-all">
+                        <Icon name={feature.icon} size={24} className="text-primary" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                      <p className="text-muted-foreground">{feature.description}</p>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
-        <section id="features" className="container mx-auto px-4 py-20 border-t border-border/50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Возможности платформы
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Всё необходимое для создания современных веб-приложений
-              </p>
-            </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, idx) => (
-                <Card
-                  key={idx}
-                  className="p-6 bg-card/30 backdrop-blur border-border/50 hover:border-primary/50 transition-all hover:scale-105 group"
-                  style={{ animationDelay: `${idx * 100}ms` }}
-                >
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 group-hover:from-primary/30 group-hover:to-secondary/30 transition-all">
-                    <Icon name={feature.icon} size={24} className="text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <section className="container mx-auto px-4 py-20 border-t border-border/50">
           <div className="max-w-4xl mx-auto text-center">
