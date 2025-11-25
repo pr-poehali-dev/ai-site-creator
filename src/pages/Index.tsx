@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import KnowledgeBase from '@/components/KnowledgeBase';
+import AICodeGenerator from '@/components/AICodeGenerator';
 
 const Index = () => {
   const [messages, setMessages] = useState([
@@ -86,6 +87,14 @@ const Index = () => {
                 }`}
               >
                 Чат
+              </button>
+              <button
+                onClick={() => setActiveTab('generator')}
+                className={`text-sm transition-colors ${
+                  activeTab === 'generator' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Генератор
               </button>
               <button
                 onClick={() => setActiveTab('knowledge')}
@@ -189,6 +198,12 @@ const Index = () => {
                 ))}
               </div>
             </div>
+            )}
+
+            {activeTab === 'generator' && (
+              <div className="animate-fade-in">
+                <AICodeGenerator />
+              </div>
             )}
 
             {activeTab === 'knowledge' && (
